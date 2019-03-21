@@ -1,1 +1,1 @@
-# dailyfresh
+我的第一个基于django的项目
