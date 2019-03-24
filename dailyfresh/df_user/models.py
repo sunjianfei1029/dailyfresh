@@ -1,10 +1,17 @@
-from django.db import models
+#coding=utf-8
 
-class UserInfo(models.Model):
-    uname=models.CharField(max_length=20)
-    upwd=models.CharField(max_length=40)
-    uemail=models.CharField(max_length=30)
-    ushou=models.CharField(max_length=20,default='')
-    uaddress=models.CharField(max_length=100,default='')
-    uyoubian=models.CharField(max_length=6,default='')
-    uphone=models.CharField(max_length=11,default='')
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+# from iisdangerous import TimedJsonWebSingatureSerializer
+
+
+
+class User(AbstractUser):
+    '''用户模型类'''
+
+    # def generate_active_token(self):
+    #     '''生成用户签名字符串'''
+    class Meta:
+        db_table = 'df_user'
+        verbose_name = '用户'
+        verbose_name_plural = verbose_name

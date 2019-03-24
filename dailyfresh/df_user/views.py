@@ -3,7 +3,8 @@
 from django.shortcuts import render,redirect
 from models import *
 from hashlib import sha1
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
+
 
 # 跳转到注册页面
 def register(request):
@@ -23,14 +24,14 @@ def register_handle(request):
         return redirect('/user/register')
 
     # 没有问题，创建对象
-    user = UserInfo()
-    user.uname=uname
-    user.uemail=uemail
+    user = User()
+    user.username=uname
+    user.email=uemail
     # 密码加密，然后再保存到对象
     s1=sha1()
     s1.update(upwd)
     upwd3=s1.hexdigest()
-    user.upwd=upwd3
+    user.password=upwd3
 
     # 把user对象保存到数据科
     user.save()
@@ -38,7 +39,7 @@ def register_handle(request):
     return redirect('/user/login')
 
 # 加载登录页面
-def login(request):
+def login2(request):
     return render(request,'df_user/login.html')
 
 # 登录验证
@@ -60,14 +61,14 @@ def login_handle(request):
     s1.update(upwd)
     upwd2 = s1.hexdigest()
     try:
-        user = UserInfo.objects.get(uname=uname, upwd=upwd2)
+        user = User.objects.get(username=uname, password=upwd2)
     except :
         user = None
 
 
     if user is not None:
-       return render(request, 'df_index/index.html')
-
+        login(request,user)
+        return render(request, 'df_index/index.html')
     else:
         # 报错
         context = {'errmsg': '用户名密码不正确'}
